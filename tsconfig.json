@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "index.d.ts"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@screens/*": ["screens/*"],
+      "@assets/*": ["assets/*"],
+      "@navigation/*": ["navigation/*"],
+      "@utils/*": ["utils/*"],
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "index.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js",
+    "react-native.config.js",
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.spec.ts"
+  ],
+  "extends": "@react-native/typescript-config/tsconfig.json"
+}

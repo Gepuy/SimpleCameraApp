@@ -1,50 +1,56 @@
-# Welcome to your Expo app 👋
+# Simple Camera App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This React Native project implements a simple camera application that allows users to capture an image of food, overlay the app's logo, add a hardcoded macro description, and save the modified image to the device's storage.
 
-## Get started
+## Requirements
 
-1. Install dependencies
+1. **Camera Functionality:**
+   - Implement the camera functionality to capture an image.
 
-   ```bash
-   npm install
-   ```
+2. **Add Logo and Macro Description:**
+   - Overlay a logo of the app on the captured image.
+   - Add a hardcoded macro description of the food (e.g., "Protein: 10g, Carbs: 20g, Fat: 5g").
+   - Ensure the position of the logo and macro description on the image is visually appropriate.
 
-2. Start the app
+3. **Save Image to Device Storage:**
+   - Save the modified image (with the logo and macro description) to the device storage.
 
-   ```bash
-    npx expo start
-   ```
+4. **UI/UX:**
+   - Provide a simple and clean UI for capturing the image and displaying the result.
+   - Include basic navigation if needed.
 
-In the output, you'll find options to open the app in a
+## How to Run the Project
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Follow these steps to run the Simple Camera App on your local machine or device:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Installation
 
-## Get a fresh project
-
-When you're ready, run:
+1. Clone the repository:
 
 ```bash
-npm run reset-project
+git clone https://github.com/yourusername/simple-camera-app.git
+cd simple-camera-app
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies using Yarn:
+```bash
+yarn install
+```
 
-## Learn more
+3. Start the Expo development server:
+```bash
+yarn start
+```
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## Implementation Details
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Overlay and Storage Functionality
 
-## Join the community
+- **Overlay Implementation:**
+   - Uses `expo-image-manipulator` to overlay the app’s logo and add a hardcoded macro description to the captured image. Positioning is adjusted based on the image dimensions for visual clarity.
 
-Join our community of developers creating universal apps.
+- **Storage Functionality:**
+   - Utilizes `expo-file-system` to save the processed image to the device's local storage. Handles any errors that may occur during the saving process to ensure data integrity.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---

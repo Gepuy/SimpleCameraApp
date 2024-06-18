@@ -25,7 +25,8 @@
       "@navigation/*": ["navigation/*"],
       "@utils/*": ["utils/*"],
       "@types/*": ["types/*"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@hooks/*": ["hooks/*"]
     }
   },
   "include": [

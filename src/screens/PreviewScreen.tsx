@@ -1,6 +1,7 @@
 import { AppView } from "@components/AppPage/AppPage";
 import { MacroOverlay } from "@components/PreviewScreen/MacroOverlay";
 import { StyledText } from "@components/StyledText/StyledText.styled";
+import useMediaLibraryPermissions from "@hooks/useMediaLibraryPermissions";
 import { AppNavigatorParamsList } from "@navigation/navigation-types";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { logoIcon } from "@utils/asset-imports";
@@ -8,7 +9,7 @@ import { getScreenWidth } from "@utils/dimensions";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Alert } from "react-native";
 import ViewShot from "react-native-view-shot";
 import { ThemeInterface } from "styled-components";
 import styled, { withTheme } from "styled-components/native";
@@ -17,49 +18,71 @@ type PreviewScreenProps = {
   readonly theme: ThemeInterface;
 }
 
+const ALBUM_NAME = "Persikas";
+
 const _PreviewScreen = ({ theme }: PreviewScreenProps) => {
   const route = useRoute<RouteProp<AppNavigatorParamsList, "Preview">>();
   const { photo } = route.params;
 
-  const viewShotRef = useRef(null);
+  const viewShotRef = useRef<ViewShot>(null);
   const [processedPhoto, setProcessedPhoto] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const processImage = async () => {
-    if (!viewShotRef.current) return;
-    try {
-      const uri = await viewShotRef.current.capture();
-      setProcessedPhoto(uri);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error capturing image:", error);
-      alert("Error capturing image");
-      setLoading(false);
-    }
-  };
+  const permissionGranted = useMediaLibraryPermissions();
 
   useEffect(() => {
-    processImage();
-  }, [viewShotRef.current]);
+    if (!viewShotRef?.current) return;
+
+    const captureImage = async () => {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const uri = await viewShotRef.current.capture();
+        setProcessedPhoto(uri);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error capturing image:", error);
+        setLoading(false);
+      }
+    };
+
+    captureImage();
+  }, [viewShotRef?.current]);
 
   const saveImage = async () => {
+    if (!permissionGranted) {
+      Alert.alert("Error", "Media Library permissions are required to save images.");
+      return;
+    }
+
     if (processedPhoto) {
       try {
-        const fileUri = FileSystem.documentDirectory + `photos/Photo_${Date.now()}.jpg`;
-        await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + "photos", { intermediates: true });
-        await FileSystem.moveAsync({
+        const folderUri = FileSystem.documentDirectory + "photos";
+        const folderInfo = await FileSystem.getInfoAsync(folderUri);
+
+        if (!folderInfo.exists) {
+          await FileSystem.makeDirectoryAsync(folderUri, { intermediates: true });
+        }
+
+        const fileUri = folderUri + `/Photo_${Date.now()}.jpg`;
+        await FileSystem.copyAsync({
           from: processedPhoto,
           to: fileUri,
         });
 
         const asset = await MediaLibrary.createAssetAsync(fileUri);
-        await MediaLibrary.createAlbumAsync("Persikas", asset, false);
-        alert("Photo saved to device storage!");
+
+        const album = await MediaLibrary.getAlbumAsync(ALBUM_NAME);
+        if (!album) {
+          await MediaLibrary.createAlbumAsync(ALBUM_NAME, asset, false);
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album.id, false);
+        }
+
+        Alert.alert("Success", "Photo saved to device storage!");
       } catch (error) {
         console.error("Error saving image:", error);
       }
     } else {
-      alert("Failed to save image to device storage!");
+      Alert.alert("Failed to save image to device storage!");
     }
   };
 
@@ -78,7 +101,7 @@ const _PreviewScreen = ({ theme }: PreviewScreenProps) => {
             </SaveButton>
           </>
         )}
-        <HiddenView >
+        <HiddenView>
           <ViewShot ref={viewShotRef} options={{ format: "jpg", quality: 1.0 }}>
             <MacroOverlay
               photoUri={photo.uri}

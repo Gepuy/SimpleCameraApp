@@ -1,10 +1,11 @@
 import { AppView } from "@components/AppPage/AppPage";
+import { StyledText } from "@components/StyledText/StyledText.styled";
 import { NavigationProps } from "@navigation/navigation-types";
 import { useNavigation } from "@react-navigation/core";
 import { Camera } from "expo-camera";
 import { PermissionStatus } from "expo-modules-core/src/PermissionsInterface";
 import React, { useEffect, useRef, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { withTheme } from "styled-components";
 import styled from "styled-components/native";
 
@@ -33,7 +34,7 @@ const _CameraScreen = () => {
   }
 
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <StyledText>No access to camera</StyledText>;
   }
 
   return (
@@ -59,17 +60,17 @@ const StyledCamera= styled(Camera)`
 `;
 
 const CaptureButton = styled.TouchableOpacity`
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    bottom: 35px;
-    align-self: center;
-    background-color: transparent;
-    border-radius: 40px;
-    border-width: 3px;
-    border-color: ${({ theme }) => theme.colors.white};
-    justify-content: center;
-    align-items: center; 
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  bottom: 35px;
+  align-self: center;
+  background-color: transparent;
+  border-radius: 40px;
+  border-width: 3px;
+  border-color: ${({ theme }) => theme.colors.white};
+  justify-content: center;
+  align-items: center; 
 `;
 
 const InnerCircle = styled.View`

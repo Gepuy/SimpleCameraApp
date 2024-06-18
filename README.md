@@ -41,6 +41,18 @@ yarn install
 ```bash
 yarn start
 ```
+
+### Build:
+
+For initializing aes build: https://docs.expo.dev/eas-update/getting-started/ 
+
+For creating apk: https://docs.expo.dev/build-reference/apk/
+
+login and run 
+
+```bash
+yarn build-android
+```
 ---
 
 ## Implementation Details

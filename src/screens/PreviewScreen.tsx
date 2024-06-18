@@ -8,7 +8,7 @@ import { logoIcon } from "@utils/asset-imports";
 import { getScreenWidth } from "@utils/dimensions";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert } from "react-native";
 import ViewShot from "react-native-view-shot";
 import { ThemeInterface } from "styled-components";
@@ -28,9 +28,10 @@ const _PreviewScreen = ({ theme }: PreviewScreenProps) => {
   const [processedPhoto, setProcessedPhoto] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const permissionGranted = useMediaLibraryPermissions();
+  const [layoutDone, setLayoutDone] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!viewShotRef?.current) return;
+  useLayoutEffect(() => {
+    if (!viewShotRef.current || !layoutDone) return;
 
     const captureImage = async () => {
       try {
@@ -45,7 +46,7 @@ const _PreviewScreen = ({ theme }: PreviewScreenProps) => {
     };
 
     captureImage();
-  }, [viewShotRef?.current]);
+  }, [layoutDone]);
 
   const saveImage = async () => {
     if (!permissionGranted) {
@@ -90,7 +91,7 @@ const _PreviewScreen = ({ theme }: PreviewScreenProps) => {
     <AppView title="Picture preview">
       <Container>
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color={theme.colors.burntSienna} />
         ) : (
           <>
             <PreviewImage source={{ uri: processedPhoto }} />
@@ -102,7 +103,11 @@ const _PreviewScreen = ({ theme }: PreviewScreenProps) => {
           </>
         )}
         <HiddenView>
-          <ViewShot ref={viewShotRef} options={{ format: "jpg", quality: 1.0 }}>
+          <ViewShot
+            ref={viewShotRef}
+            options={{ format: "jpg", quality: 1.0 }}
+            onLayout={() => setLayoutDone(true)}
+          >
             <MacroOverlay
               photoUri={photo.uri}
               logoUri={logoIcon}

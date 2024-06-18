@@ -1,9 +1,3 @@
-Let's update the README to reflect the accurate implementation details, mentioning the use of `react-native-view-shot` instead of `expo-image-manipulator` for the overlay functionality.
-
-Here is the revised README:
-
----
-
 # Simple Camera App
 
 This React Native project implements a simple camera application that allows users to capture an image of food, overlay the app's logo, add a hardcoded macro description, and save the modified image to the device's storage.
@@ -61,5 +55,3 @@ yarn start
     - Uses `expo-media-library` to save the image to the user's photo album.
 
 ---
-
-This updated README accurately reflects the implementation details of your project, including the libraries and methods used.
